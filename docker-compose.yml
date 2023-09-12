@@ -1,0 +1,30 @@
+version: '3
+'
+services:
+  eureka:
+    container_name: eureka
+    build:
+      context: ./eureka
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+  base-service:
+    container_name: base-service
+    build:
+      context: ./base-service
+      dockerfile: Dockerfile
+    depends_on:
+    - eureka
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:8761/eureka
+  data-service:
+    container_name: data-service
+    build:
+      context: ./data-service
+      dockerfile: Dockerfile
+    depends_on:
+    - eureka
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:8761/eureka
